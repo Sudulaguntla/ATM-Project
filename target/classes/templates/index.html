@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<style>
+    form {
+        border: 3px solid #f1f1f1;
+    }
+
+    input[type=number] {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+    }
+
+    button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+    }
+
+    button:hover {
+        opacity: 0.8;
+    }
+
+    .cancelbtn {
+        width: auto;
+        padding: 10px 18px;
+        background-color: #f44336;
+    }
+
+    .imgcontainer {
+        text-align: center;
+        margin: 24px 0 12px 0;
+    }
+
+
+    img.avatar {
+        width: 40%;
+        border-radius: 50%;
+    }
+
+
+    .container {
+        padding: 16px;
+    }
+
+
+    span.psw {
+        float: right;
+        padding-top: 16px;
+    }
+
+
+    @media screen and (max-width: 300px) {
+        span.psw {
+            display: block;
+            float: none;
+        }
+
+        .cancelbtn {
+            width: 100%;
+        }
+    }
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("button").click(function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: "get",
+                url: "/atm/dispense/" + $("#amount").val(),
+                data: {
+
+                },
+                success: function (result, status, xhr, dataType) {
+
+                    try {
+                        var content="<div>Cash Dispensed. Please collect below denomination <div>";
+                        $.each(result, function (key, value) {
+                            content = content + "<div>"+"Denomination $"+key +" :"+ value +" numbers"+"</div>"
+                        });
+                        $("#success_message").html(content);
+                        $("#error_message").html("");
+                    } catch (e) {
+                        $("#success_message").html("");
+                        $("#error_message").html(result);
+                    }
+
+                },
+                error: function (result) {
+                    $("#error_message").html(result);
+                }
+            });
+        });
+    });
+</script>
+
+<body>
+
+    <h2>Welcome to ATM Service</h2>
+
+
+
+    <div class="container">
+        <div style="color:#4CAF50">
+            <div id="success_message"></div>
+        </div>
+        
+        <div style="color:#f43d00">
+            <div id="error_message"></div>
+        </div>
+        
+        <label><b>Amount to Dispense</b></label>
+        <input type="number" placeholder="Enter Amount to Dispense" name="amount" id="amount" required>
+
+        <button>Dispense</button>
+    </div>
+
+
+
+</body>
+
+</html>
